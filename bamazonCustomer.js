@@ -1,15 +1,11 @@
-mysql = require('promise-mysql');
-inq = require('inquirer');
+const mysql = require('promise-mysql');
+const inq = require('inquirer');
+const key = require('./keys');
 
-const customerPrompt = () => {
+const main = () => {
 	let connection;
 	let productInfo;
-	mysql.createConnection({
-	  host     : 'localhost',
-	  user     : 'root',
-	  password : 'ucsd0417',
-	  database : 'bamazon'
-	}).then(conn => {
+	mysql.createConnection(key).then(conn => {
 		connection = conn;
 		return connection.query('SELECT item_id, product_name, price, stock_quantity FROM products;')
 	}).then(rows => {
@@ -60,5 +56,3 @@ const customerPrompt = () => {
 const updateInventory = (id, qty) => {
 	console.log('Inventory Updated (not yet, actually).')
 }
-
-customerPrompt();
