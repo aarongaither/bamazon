@@ -45,7 +45,7 @@ const main = () => {
 		if (res.repeat) {
 			console.log('Con end from cst prompt, before repeat.')
 			connection.end();
-			customerPrompt();
+			main();
 		} else {
 			console.log('Con end from cst prompt.')
 			connection.end();
