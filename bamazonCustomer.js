@@ -9,7 +9,7 @@ const customerPrompt = () => {
 	  user     : 'root',
 	  password : 'ucsd0417',
 	  database : 'bamazon'
-	}).then((conn) => {
+	}).then(conn => {
 		connection = conn;
 		return connection.query('SELECT item_id, product_name, price, stock_quantity FROM products;')
 	}).then(rows => {
@@ -45,7 +45,7 @@ const customerPrompt = () => {
 			name: "repeat",
 			message: "Would you like to make another purchase?"
 		})
-	}).then((res) => {
+	}).then(res => {
 		if (res.repeat) {
 			console.log('Con end from cst prompt, before repeat.')
 			connection.end();
