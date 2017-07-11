@@ -62,7 +62,7 @@ const createDept = function() {
         connection = conn;
         return connection.query('INSERT INTO departments (department_name, over_head_costs) VALUES (?, ?);',[deptInfo.name, deptInfo.over])
     }).then(row => {
-        table(row);
+        console.log('Department Added.');
         connection.end();
         console.log('\n')
         main();
