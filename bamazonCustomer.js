@@ -57,7 +57,7 @@ const main = () => {
             console.log('Con end from cst prompt.')
             connection.end();
         }
-    });
+    }).catch(err => {console.log(err)});
 }
 
 module.exports = main;

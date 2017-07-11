@@ -20,7 +20,7 @@ const main = function() {
         } else {
             console.log('Somehow, we have an invalid command...')
         }
-    })
+    }).catch(err => {console.log(err)})
 }
 
 const viewProductSales = function() {
@@ -38,7 +38,7 @@ const viewProductSales = function() {
 		connection.end();
 		console.log('\n')
 		main();
-	})
+	}).catch(err => {console.log(err)})
 }
 
 const createDept = function() {
@@ -66,7 +66,7 @@ const createDept = function() {
         connection.end();
         console.log('\n')
         main();
-    })
+    }).catch(err => {console.log(err)})
 }
 
 module.exports = main;

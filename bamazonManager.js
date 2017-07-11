@@ -24,7 +24,7 @@ const main = function() {
         } else {
             console.log('Somehow, we have an invalid command...')
         }
-    })
+    }).catch(err => {console.log(err)})
 }
 
 const viewProducts = function() {
@@ -37,7 +37,7 @@ const viewProducts = function() {
         connection.end();
         console.log('\n')
         main();
-    })
+    }).catch(err => {console.log(err)})
 }
 
 const viewLowInv = function() {
@@ -50,7 +50,7 @@ const viewLowInv = function() {
         connection.end();
         console.log('\n')
         main();
-    })
+    }).catch(err => {console.log(err)})
 }
 
 const addtoInv = function() {
@@ -77,9 +77,7 @@ const addtoInv = function() {
         connection.end();
         console.log('\n')
         main();
-    }).catch(err => {
-        console.log(err)
-    })
+    }).catch(err => {console.log(err)})
 }
 
 const addNewProduct = function() {
@@ -117,7 +115,7 @@ const addNewProduct = function() {
         connection.end();
         console.log('\n')
         main();
-    })  
+    }).catch(err => {console.log(err)})
 }
 
 module.exports = main;
