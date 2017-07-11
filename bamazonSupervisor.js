@@ -9,7 +9,7 @@ const main = function() {
         name: 'action',
         message: 'What would you like to do?',
         choices: ['View Product Sales by Department', 'Create New Department', 'Exit']
-    }).then((res) => {
+    }).then(res => {
         let inp = res.action;
         if (inp == 'Exit') {
             return false;
@@ -34,7 +34,6 @@ const viewProductSales = function() {
             GROUP BY department_name
         `)
     }).then(rows => {
-        // console.log(rows)
         rows.forEach(elem => {
             elem.total_profit = elem['SUM(products.product_sales)'] - elem.over_head_costs;
         })
