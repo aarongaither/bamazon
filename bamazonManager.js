@@ -60,12 +60,14 @@ const addtoInv = function() {
     {
         type: 'input',
         name: 'id',
-        message: 'For which ID would you like to add inventory?'
+        message: 'For which ID would you like to add inventory?',
+        validate: val => !isNaN(val)
     },
     {
         type: 'input',
         name: 'qty',
-        message: 'How many units would you like to add?'
+        message: 'How many units would you like to add?',
+        validate: val => !isNaN(val)
     }]).then(res => {
         productInfo = res;
         return mysql.createConnection(key);
@@ -87,7 +89,7 @@ const addNewProduct = function() {
     {
         type: 'input',
         name: 'name',
-        message: 'product name?'
+        message: 'Product name?'
     },
     {
         type: 'input',
@@ -97,12 +99,14 @@ const addNewProduct = function() {
     {
         type: 'input',
         name: 'price',
-        message: 'Price?'
+        message: 'Price?',
+        validate: val => !isNaN(val)
     },
     {
         type: 'input',
         name: 'qty',
-        message: 'Quantity in stock?'
+        message: 'Quantity in stock?',
+        validate: val => !isNaN(val)
     }
     ]).then(res => {
         productInfo = res;

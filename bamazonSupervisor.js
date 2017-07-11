@@ -56,7 +56,8 @@ const createDept = function() {
     {
         type: 'input',
         name: 'over',
-        message: 'Overhead:'
+        message: 'Overhead:',
+        validate: val => !isNaN(val)
     }
     ]).then(res => {
         deptInfo = res;

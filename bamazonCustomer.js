@@ -25,7 +25,8 @@ const main = () => {
         return inq.prompt({
             type: "input",
             name: "qty",
-            message: `${productInfo.product_name} - How many would you like?`
+            message: `${productInfo.product_name} - How many would you like?`,
+            validate: val => !isNaN(val)
         })
     }).then(res => {
         let qty = res.qty;
@@ -49,14 +50,8 @@ const main = () => {
             message: "Would you like to make another purchase?"
         })
     }).then(res => {
-        if (res.repeat) {
-            console.log('Con end from cst prompt, before repeat.')
-            connection.end();
-            main();
-        } else {
-            console.log('Con end from cst prompt.')
-            connection.end();
-        }
+        connection.end();
+        if (res.repeat) main()
     }).catch(err => {console.log(err)});
 }
 
