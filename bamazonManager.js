@@ -1,6 +1,7 @@
 const mysql = require('promise-mysql');
 const inq = require('inquirer');
 const key = require('./keys');
+const table = require('./table');
 
 const main = function() {
     inq.prompt({
@@ -32,7 +33,7 @@ const viewProducts = function() {
         connection = conn;
         return connection.query('SELECT * FROM products;')
     }).then(rows => {
-        console.log(rows);
+        table(rows);
         connection.end();
         console.log('\n')
         main();
@@ -45,7 +46,7 @@ const viewLowInv = function() {
         connection = conn;
         return connection.query('SELECT * FROM products WHERE stock_quantity < 5;')
     }).then(rows => {
-        console.log(rows);
+        table(rows);
         connection.end();
         console.log('\n')
         main();
@@ -72,10 +73,12 @@ const addtoInv = function() {
         connection = conn;
         return connection.query('UPDATE products SET stock_quantity = stock_quantity + ? WHERE item_id = ?;', [productInfo.qty, productInfo.id])
     }).then(rowReturn => {
-        console.log(rowReturn);
+        console.log('Inventory Updated.');
         connection.end();
         console.log('\n')
         main();
+    }).catch(err => {
+        console.log(err)
     })
 }
 
@@ -110,7 +113,7 @@ const addNewProduct = function() {
         connection = conn;
         return connection.query('INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES (?, ?, ?, ?);',[productInfo.name, productInfo.dep, productInfo.price, productInfo.qty])
     }).then(row => {
-        console.log(row);
+        console.log('Product Added.');
         connection.end();
         console.log('\n')
         main();
