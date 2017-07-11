@@ -16,7 +16,8 @@ const main = () => {
         return inq.prompt({
             type: "input",
             name: "productID",
-            message: "What would you like to purchase?"
+            message: "What would you like to purchase?",
+            validate: val => !isNaN(val)
         })
     }).then(res => {
         return connection.query('SELECT item_id, product_name, price, stock_quantity FROM products WHERE item_id=?;', res.productID)
@@ -34,15 +35,18 @@ const main = () => {
             console.log('Sorry, there is not enough remaining in stock to fulfill your order!')
         } else {
             let sales = qty * productInfo.price;
-            console.log('Your purchase info:')
-            console.log(`${productInfo.product_name}, ${qty}, ${productInfo.price}, ${qty * productInfo.price}.`)
+            console.log('\nYour purchase info:')
+            table([{
+                product_name: productInfo.product_name,
+                quantity: qty,
+                price_each: productInfo.price,
+                total_cost: qty * productInfo.price
+            }]);
             return connection.query(
                 `UPDATE products 
                 SET stock_quantity = stock_quantity - ?, product_sales = product_sales + ? 
                 WHERE item_id = ?;`, [qty, sales, productInfo.item_id])
         }
-    }).then(row => {
-        console.log(row)
     }).then(() => {
         return inq.prompt({
             type: "confirm",
@@ -50,6 +54,7 @@ const main = () => {
             message: "Would you like to make another purchase?"
         })
     }).then(res => {
+        console.log('\n')
         connection.end();
         if (res.repeat) main()
     }).catch(err => {console.log(err)});
