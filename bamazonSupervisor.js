@@ -24,21 +24,25 @@ const main = function() {
 }
 
 const viewProductSales = function() {
-	let connection;
-	mysql.createConnection(key).then(conn => {
-		connection = conn;
-		return connection.query(`
-			SELECT departments.department_name, departments.over_head_costs, SUM(products.product_sales)
-			FROM departments
-			INNER JOIN products ON departments.department_name=products.department_name
-			GROUP BY department_name
-		`)
-	}).then(rows => {
-		table(rows);
-		connection.end();
-		console.log('\n')
-		main();
-	}).catch(err => {console.log(err)})
+    let connection;
+    mysql.createConnection(key).then(conn => {
+        connection = conn;
+        return connection.query(`
+            SELECT departments.department_id, departments.department_name, departments.over_head_costs, SUM(products.product_sales)
+            FROM departments
+            INNER JOIN products ON departments.department_name=products.department_name
+            GROUP BY department_name
+        `)
+    }).then(rows => {
+        // console.log(rows)
+        rows.forEach(elem => {
+            elem.total_profit = elem['SUM(products.product_sales)'] - elem.over_head_costs;
+        })
+        table(rows);
+        connection.end();
+        console.log('\n')
+        main();
+    }).catch(err => {console.log(err)})
 }
 
 const createDept = function() {
