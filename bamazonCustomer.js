@@ -34,13 +34,13 @@ const main = () => {
         if (qty > productInfo.stock_quantity) {
             console.log('Sorry, there is not enough remaining in stock to fulfill your order!')
         } else {
-            let sales = qty * productInfo.price;
+            let sales = (qty * productInfo.price).toFixed(2);
             console.log('\nYour purchase info:')
             table([{
                 product_name: productInfo.product_name,
                 quantity: qty,
                 price_each: productInfo.price,
-                total_cost: qty * productInfo.price
+                total_cost: sales
             }]);
             return connection.query(
                 `UPDATE products 
