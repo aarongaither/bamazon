@@ -55,25 +55,25 @@ const viewLowInv = function() {
 
 const addtoInv = function() {
     let connection;
-    let productInfo;
-    inq.prompt([
-    {
-        type: 'input',
-        name: 'id',
-        message: 'For which ID would you like to add inventory?',
-        validate: val => !isNaN(val)
-    },
-    {
-        type: 'input',
-        name: 'qty',
-        message: 'How many units would you like to add?',
-        validate: val => !isNaN(val)
-    }]).then(res => {
-        productInfo = res;
-        return mysql.createConnection(key);
-    }).then(conn => {
+    mysql.createConnection(key).then(conn => {
         connection = conn;
-        return connection.query('UPDATE products SET stock_quantity = stock_quantity + ? WHERE item_id = ?;', [productInfo.qty, productInfo.id])
+        return connection.query('SELECT item_id FROM products;')
+    }).then(rows => {
+        return inq.prompt([
+        {
+            type: 'input',
+            name: 'id',
+            message: 'For which ID would you like to add inventory?',
+            validate: val => !rows.every(e => e.item_id != val) || "Please enter a valid ID"
+        },
+        {
+            type: 'input',
+            name: 'qty',
+            message: 'How many units would you like to add?',
+            validate: val => !isNaN(val) || "Please enter a number."
+        }])
+    }).then(res => {
+        return connection.query('UPDATE products SET stock_quantity = stock_quantity + ? WHERE item_id = ?;', [res.qty, res.id])
     }).then(rowReturn => {
         console.log('Inventory Updated.');
         connection.end();
@@ -85,35 +85,37 @@ const addtoInv = function() {
 const addNewProduct = function() {
     let connection;
     let productInfo;
-    inq.prompt([
-    {
-        type: 'input',
-        name: 'name',
-        message: 'Product name?'
-    },
-    {
-        type: 'input',
-        name: 'dep',
-        message: 'Department it belongs in?'
-    },
-    {
-        type: 'input',
-        name: 'price',
-        message: 'Price?',
-        validate: val => !isNaN(val)
-    },
-    {
-        type: 'input',
-        name: 'qty',
-        message: 'Quantity in stock?',
-        validate: val => !isNaN(val)
-    }
-    ]).then(res => {
-        productInfo = res;
-        return mysql.createConnection(key);
-    }).then(conn => {
+    mysql.createConnection(key).then(conn =>{
         connection = conn;
-        return connection.query('INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES (?, ?, ?, ?);',[productInfo.name, productInfo.dep, productInfo.price, productInfo.qty])
+        return connection.query('SELECT department_name FROM departments;')
+    }).then(rows => {
+        return inq.prompt([
+            {
+                type: 'input',
+                name: 'name',
+                message: 'Product name?'
+            },
+            {
+                type: 'input',
+                name: 'dep',
+                message: 'Department it belongs in?',
+                validate: val => !rows.every(e => e.department_name != val) || "Please enter a valid department."
+            },
+            {
+                type: 'input',
+                name: 'price',
+                message: 'Price?',
+                validate: val => !isNaN(val) || "Please enter a number."
+            },
+            {
+                type: 'input',
+                name: 'qty',
+                message: 'Quantity in stock?',
+                validate: val => !isNaN(val) || "Please enter a number."
+            }
+        ])
+    }).then(res => {
+        return connection.query('INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES (?, ?, ?, ?);',[res.name, res.dep, res.price, res.qty])
     }).then(row => {
         console.log('Product Added.');
         connection.end();

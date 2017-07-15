@@ -17,7 +17,7 @@ const main = () => {
             type: "input",
             name: "productID",
             message: "What would you like to purchase?",
-            validate: val => !isNaN(val)
+            validate: val => !rows.every(e => e.item_id != val) || "Please enter a valid ID"  
         })
     }).then(res => {
         return connection.query('SELECT item_id, product_name, price, stock_quantity FROM products WHERE item_id=?;', res.productID)
@@ -27,7 +27,7 @@ const main = () => {
             type: "input",
             name: "qty",
             message: `${productInfo.product_name} - How many would you like?`,
-            validate: val => !isNaN(val)
+            validate: val => !isNaN(val) || "Please enter a number."
         })
     }).then(res => {
         let qty = res.qty;
